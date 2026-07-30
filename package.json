@@ -19,7 +19,7 @@
         "test": "vitest run"
     },
     "engines": {
-        "node": ">=20"
+        "node": ">=24"
     },
     "devDependencies": {
         "@concertypin/config": "^0.1.0",

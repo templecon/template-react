@@ -21,6 +21,9 @@ importers:
         specifier: ^7.18.1
         version: 7.18.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
     devDependencies:
+      '@concertypin/config':
+        specifier: ^0.1.0
+        version: 0.1.0(oxlint@1.74.0(oxlint-tsgolint@0.24.0))
       '@preact/preset-vite':
         specifier: ^2.10.5
         version: 2.10.5(@babel/core@7.29.7)(preact@10.29.7)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0))
@@ -190,6 +193,12 @@ packages:
 
   '@blazediff/core@1.9.1':
     resolution: {integrity: sha512-ehg3jIkYKulZh+8om/O25vkvSsXXwC+skXmyA87FFx6A/45eqOkZsBltMw/TVteb0mloiGT8oGRTcjRAz66zaA==}
+
+  '@concertypin/config@0.1.0':
+    resolution: {integrity: sha512-xZjY0+skOVRrTDzjKLblqnhUor2C6qm5Ovew6ElzgzxuFjqDWRvoXVsLOMSCLHxBA9ECe8ExO0uBZKtz6DbvTQ==}
+    engines: {node: '>=20.19.0'}
+    peerDependencies:
+      oxlint: '>=1.47.0 <2'
 
   '@emnapi/core@1.11.1':
     resolution: {integrity: sha512-RSvbQmHzdKzNsLYa/wHrbc3KN4sYLKAdPZxqiM2HATqv/SBk2/ENSHpvXGaLOMcsAyz0poEGqkmmKYG3OWiJEQ==}
@@ -1565,6 +1574,10 @@ snapshots:
   '@bcoe/v8-coverage@1.0.2': {}
 
   '@blazediff/core@1.9.1': {}
+
+  '@concertypin/config@0.1.0(oxlint@1.74.0(oxlint-tsgolint@0.24.0))':
+    dependencies:
+      oxlint: 1.74.0(oxlint-tsgolint@0.24.0)
 
   '@emnapi/core@1.11.1':
     dependencies:

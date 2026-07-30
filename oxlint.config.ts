@@ -1,5 +1,5 @@
 import { defineConfig } from "oxlint";
-import eslintConfig from "./scripts/linter/oxlint-eslint.ts";
+import frontendConfig from "@concertypin/config/oxlint/frontend";
 import reactConfig from "./scripts/linter/oxlint-react.ts";
 
 export default defineConfig({
@@ -37,5 +37,5 @@ export default defineConfig({
         typeAware: true,
         typeCheck: true,
     },
-    extends: [eslintConfig, reactConfig],
+    extends: [frontendConfig, reactConfig],
 });

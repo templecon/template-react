@@ -9,7 +9,7 @@ import type { Plugin } from "vite";
  * - dist/<route>/index.html for each route, with __SPA_ROUTE__ injected for file:// support
  */
 export function spaCopyPlugin(routes: string[]): Plugin {
-    const distDir = fileURLToPath(new URL("dist", import.meta.url));
+    const distDir = fileURLToPath(new URL("../dist", import.meta.url));
     return {
         name: "spa-copy",
         apply: "build",

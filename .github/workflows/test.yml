@@ -20,8 +20,6 @@ jobs:
 
             - name: Setup pnpm Environment
               uses: concertypin/action/pnpm-install@master
-              with:
-                  install-playwright-deps: "true"
 
             - name: Run tests
               run: pnpm run test --reporter=blob --coverage.enabled --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}

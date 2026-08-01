@@ -1,8 +1,6 @@
-Structure:
+# Tests
 
-tests/
+- `browser/` contains jsdom and Testing Library fixtures for rendered user behavior.
+- `unit/` contains Node-only tests for pure logic.
 
-- tests/browser/ : Contains integration tests that run in a browser environment using Playwright. Component tests use `vitest-browser-react` which exercises the selected framework through its React-compatible render API.
-- tests/unit/ : Contains unit tests that run in a Node.js environment using Vitest. These tests focus on individual functions and modules without browser dependencies. Should be fast and isolated.
-
-Each subdirectory should follow same structure as src/ for easy mapping between source files and tests.
+Keep tests in the project that matches their runtime. Test route and interaction behavior through the rendered application rather than implementation details.

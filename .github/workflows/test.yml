@@ -1,64 +1,64 @@
 name: Tests
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 permissions:
-    contents: read
+  contents: read
 jobs:
-    tests:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                shardIndex: [1, 2] # [1,2,3,4,5...]
-                shardTotal: [2] # [len(shardIndex)]
-        steps:
-            - uses: actions/checkout@v4
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        shardIndex: [1, 2] # [1,2,3,4,5...]
+        shardTotal: [2] # [len(shardIndex)]
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Setup pnpm Environment
-              uses: concertypin/action/pnpm-install@master
+      - name: Setup pnpm Environment
+        uses: concertypin/action/pnpm-install@master
 
-            - name: Run tests
-              run: pnpm run test --reporter=blob --coverage.enabled --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      - name: Run tests
+        run: pnpm run test --reporter=blob --coverage.enabled --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
-            - name: Upload blob report to GitHub Actions Artifacts
-              if: ${{ !cancelled() }}
-              uses: actions/upload-artifact@v4
-              with:
-                  name: blob-report-${{ matrix.shardIndex }}
-                  path: .vitest-reports/*
-                  include-hidden-files: true
-                  retention-days: 1
-
-    merge-reports:
+      - name: Upload blob report to GitHub Actions Artifacts
         if: ${{ !cancelled() }}
-        needs: [tests]
-        permissions:
-            pull-requests: write
-            statuses: write
-            contents: read
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.shardIndex }}
+          path: .vitest-reports/*
+          include-hidden-files: true
+          retention-days: 1
 
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - name: Setup pnpm Environment
-              uses: concertypin/action/pnpm-install@master
+  merge-reports:
+    if: ${{ !cancelled() }}
+    needs: [tests]
+    permissions:
+      pull-requests: write
+      statuses: write
+      contents: read
 
-            - name: Download blob reports from GitHub Actions Artifacts
-              uses: actions/download-artifact@v4
-              with:
-                  path: .vitest-reports
-                  pattern: blob-report-*
-                  merge-multiple: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup pnpm Environment
+        uses: concertypin/action/pnpm-install@master
 
-            - name: Merge reports
-              run: pnpm run test --merge-reports --reporter=github-actions --reporter=default --coverage.reporter=text --coverage.reporter=json-summary
+      - name: Download blob reports from GitHub Actions Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: .vitest-reports
+          pattern: blob-report-*
+          merge-multiple: true
 
-            - name: Update Coverage Status
-              if: ${{ github.event_name == 'pull_request' && always()}}
-              uses: concertypin/action/report-vitest-coverage@master
-              with:
-                  threshold: 50
+      - name: Merge reports
+        run: pnpm run test --merge-reports --reporter=github-actions --reporter=default --coverage.reporter=text --coverage.reporter=json-summary
+
+      - name: Update Coverage Status
+        if: ${{ github.event_name == 'pull_request' && always()}}
+        uses: concertypin/action/report-vitest-coverage@master
+        with:
+          threshold: 50

@@ -19,7 +19,7 @@
         "test": "vitest run"
     },
     "engines": {
-        "node": ">=24"
+        "node": ">=26"
     },
     "dependencies": {
         "react": "^19.2.7",

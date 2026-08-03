@@ -23,7 +23,7 @@ Then install the dependencies:
 pnpm install
 ```
 
-`postinstall` registers the git hooks (via `simple-git-hooks`), so run `pnpm install` before your first commit. The pre-commit hook runs the non-mutating `check` script (formatting, lint, and tests); when it fails, apply fixes with `pnpm format` and `pnpm lint`.
+`postinstall` registers the git hooks (via `simple-git-hooks`), so run `pnpm install` before your first commit. The pre-commit hook runs `pnpm check`, which formats the project, applies lint fixes, and then runs the tests.
 
 ## Conventions and Rules
 

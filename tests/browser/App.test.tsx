@@ -1,21 +1,48 @@
-import { cleanup, render } from "vitest-browser-react/pure";
-import { afterEach, expect, test } from "vitest";
-import Home from "@/pages/Home";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import { expect, test } from "vitest";
+import App from "@/App";
 
-afterEach(async () => {
-    await cleanup();
+test("renders the home page and navigates to About", () => {
+    expect(import.meta.env.VITEST_MODE).toBe("browser");
+
+    render(
+        <MemoryRouter initialEntries={["/"]}>
+            <App />
+        </MemoryRouter>
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Count is 0" }));
+    expect(
+        screen.getByRole("button", { name: "Count is 1" })
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("link", { name: "About" }));
+    expect(
+        screen.getByRole("heading", { name: "About This Template" })
+    ).toBeInTheDocument();
 });
 
-test("renders Hello World heading", async () => {
-    const screen = await render(<Home />);
-    await expect.element(screen.getByText("Hello World!")).toBeVisible();
+test("normalizes the physical entry path to Home", () => {
+    render(
+        <MemoryRouter initialEntries={["/index.html"]}>
+            <App />
+        </MemoryRouter>
+    );
+
+    expect(
+        screen.getByRole("heading", { name: "Hello World!" })
+    ).toBeInTheDocument();
 });
 
-test("counter increments on click", async () => {
-    const screen = await render(<Home />);
-    const button = screen.getByRole("button");
-    await expect.element(button).toBeVisible();
-    await expect.element(screen.getByText("Count is 0")).toBeVisible();
-    await button.click();
-    await expect.element(screen.getByText("Count is 1")).toBeVisible();
+test("renders a not-found page for an unknown route", () => {
+    render(
+        <MemoryRouter initialEntries={["/missing"]}>
+            <App />
+        </MemoryRouter>
+    );
+
+    expect(
+        screen.getByRole("heading", { name: "Page not found" })
+    ).toBeInTheDocument();
 });

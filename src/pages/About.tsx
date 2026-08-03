@@ -1,32 +1,21 @@
-import { type FC } from "react";
-
-const About: FC = () => {
+function About() {
     return (
         <main className="text-center p-6">
             <h1 className="text-3xl font-bold mb-4">About This Template</h1>
             <p className="mb-2">
-                This is a <strong>Preact SPA template</strong> built with Vite.
+                This is a <strong>React SPA template</strong> built with Vite.
             </p>
             <p className="mb-2">
-                Source imports use the React-compatible module contract. At
-                build time, a single toggle in <code>vite.config.ts</code> (
-                <code>const usePreact = true</code>) selects either Preact (via{" "}
-                <code>@preact/preset-vite</code>) or real React (via{" "}
-                <code>@vitejs/plugin-react</code>) — no component source changes
-                are needed.
+                React Router handles application navigation. GitHub Pages serves
+                this app's custom 404 page for direct route loads, then React
+                renders the matching client route.
             </p>
             <p className="mb-2">
-                It supports static hosting on GitHub Pages and local{" "}
-                <code>file://</code> viewing via a custom Vite plugin that
-                copies <code>index.html</code> to route directories.
-            </p>
-            <p>
-                Testing is done with <code>vitest-browser-react</code> in Vitest
-                Browser Mode, which exercises the selected framework through the
-                React-compatible render API.
+                Tests use <code>@testing-library/react</code> in Vitest with
+                jsdom to exercise rendered user behavior.
             </p>
         </main>
     );
-};
+}
 
 export default About;

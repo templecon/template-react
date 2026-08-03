@@ -1,16 +1,9 @@
 /// <reference types="vitest/config" />
 
-import { type UserConfig, defineConfig } from "vite";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { playwright } from "@vitest/browser-playwright";
-import preact from "@preact/preset-vite";
+import { type UserConfig, defineConfig } from "vite";
 import reactPlugin from "@vitejs/plugin-react";
-import { spaCopyPlugin } from "./scripts/spaCopyPlugin";
-
-// Toggle Preact/React at build time.
-// true  → @preact/preset-vite aliases react, react-dom, react/jsx-runtime to preact/compat
-// false → @vitejs/plugin-react uses the installed react, react-dom packages
-const usePreact = true;
 
 type Config = Required<UserConfig>;
 const resolveAlias: Config["resolve"] = {
@@ -18,24 +11,6 @@ const resolveAlias: Config["resolve"] = {
         "@": fileURLToPath(new URL("src", import.meta.url)),
     },
 };
-
-const browserInclude = ["**/tests/browser/**/*.test.{ts,tsx}"];
-const browserTestConfig = {
-    enabled: true,
-    headless: true,
-    instances: [
-        {
-            browser: "chromium",
-            expect: {
-                poll: {
-                    timeout: 5000,
-                },
-            },
-            include: browserInclude,
-        },
-    ],
-    provider: playwright(),
-} satisfies Config["test"]["browser"];
 
 const testConfig: Config["test"] = {
     coverage: {
@@ -45,47 +20,52 @@ const testConfig: Config["test"] = {
         reportOnFailure: true,
         reporter: ["text", "json-summary", "html"],
     },
-    environment: "node",
     exclude: ["**/node_modules/**", "**/dist/**"],
     globals: true,
-    include: ["tests/**/*.test.{ts,tsx}"],
+    setupFiles: "./tests/setup.ts",
     projects: [
         {
             extends: true,
             test: {
-                browser: browserTestConfig,
-                name: "browser",
+                environment: "node",
+                include: ["tests/unit/**/*.test.ts"],
+                env: {
+                    VITEST_MODE: "unit",
+                },
+                name: "unit",
             },
         },
         {
             extends: true,
             test: {
-                browser: {
-                    enabled: false,
+                environment: "jsdom",
+                include: ["tests/browser/**/*.test.{ts,tsx}"],
+                env: {
+                    VITEST_MODE: "browser",
                 },
-                exclude: browserInclude,
-                name: "node",
+                name: "browser",
             },
         },
     ],
-    setupFiles: "./tests/setup.ts",
 };
 
-const frameworkPlugins = usePreact
-    ? preact({ jsxImportSource: "react", reactAliasesEnabled: true })
-    : reactPlugin();
-
 export default defineConfig({
-    base: "./",
+    base: "/",
     build: {
         outDir: "dist",
+        rolldownOptions: {
+            input: {
+                main: resolve(import.meta.dirname, "index.html"),
+                notFound: resolve(import.meta.dirname, "404.html"),
+            },
+        },
         sourcemap: true,
     },
     clearScreen: false,
-    plugins: [...[frameworkPlugins].flat(), spaCopyPlugin(["/", "/about"])],
+    plugins: [reactPlugin()],
     resolve: resolveAlias,
     server: {
-        open: "index.html",
+        open: "/",
     },
     test: testConfig,
 });

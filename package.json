@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "license": "Apache-2.0",
+    "license": "MIT",
     "author": {
         "name": "concertypin",
         "url": "https://github.com/concertypin"
@@ -12,43 +12,44 @@
         "dev": "vite",
         "build": "vite build",
         "format": "prettier --write . --cache --list-different",
-        "lint": "oxlint .",
+        "format:check": "prettier --check . --cache",
+        "lint": "pnpm run lint:check --fix",
+        "lint:check": "oxlint .",
         "postinstall": "pnpm exec simple-git-hooks",
         "preview": "vite preview",
-        "pre-commit": "pnpm run format && pnpm run lint && git add -u",
+        "check": "pnpm run format:check && pnpm run lint:check && pnpm run test",
         "test": "vitest run"
     },
     "engines": {
-        "node": ">=20"
+        "node": ">=26"
+    },
+    "dependencies": {
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "react-router-dom": "^7.18.1"
     },
     "devDependencies": {
-        "@preact/preset-vite": "^2.10.5",
+        "@concertypin/config": "^0.1.2",
         "@tailwindcss/postcss": "^4.3.2",
+        "@testing-library/dom": "^10.4.1",
+        "@testing-library/jest-dom": "^6.9.1",
+        "@testing-library/react": "^16.3.2",
         "@types/node": "^26.1.1",
         "@types/react": "^19.2.17",
         "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "^6.0.3",
-        "@vitest/browser-playwright": "^4.1.10",
         "@vitest/coverage-v8": "^4.1.10",
-        "cross-env": "^10.1.0",
         "globals": "^17.7.0",
+        "jsdom": "^30.0.1",
         "oxlint": "^1.73.0",
         "oxlint-tsgolint": "^0.24.0",
-        "playwright": "^1.61.1",
         "postcss": "^8.5.16",
         "prettier": "^3.9.5",
         "simple-git-hooks": "^2.13.1",
         "tailwindcss": "^4.3.2",
         "typescript": "~7.0.2",
         "vite": "^8.1.4",
-        "vitest": "^4.1.10",
-        "vitest-browser-react": "^2.2.0"
+        "vitest": "^4.1.10"
     },
-    "packageManager": "pnpm@10.17.1+sha512.17c560fca4867ae9473a3899ad84a88334914f379be46d455cbf92e5cf4b39d34985d452d2583baf19967fa76cb5c17bc9e245529d0b98745721aa7200ecaf7a",
-    "dependencies": {
-        "preact": "^10.29.7",
-        "react": "^19.2.7",
-        "react-dom": "^19.2.7",
-        "react-router-dom": "^7.18.1"
-    }
+    "packageManager": "pnpm@10.17.1+sha512.17c560fca4867ae9473a3899ad84a88334914f379be46d455cbf92e5cf4b39d34985d452d2583baf19967fa76cb5c17bc9e245529d0b98745721aa7200ecaf7a"
 }

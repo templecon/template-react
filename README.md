@@ -9,12 +9,21 @@ git clone <repository-url> template-react
 
 ## Requirements
 
-Node.js version 22.18.0 or higher is recommended, since it has basic TypeScript support, which is used on oxlint.config.ts.
-Older versions will:
+Node.js 26 or higher is required. The templates run TypeScript configuration and hooks directly with Node's built-in type stripping.
 
-- Older than v22.6.0: Not work, migrate Node version or oxlint.config.ts to .js.
-- Between v22.6.0 and v22.18.0: Work, but require `--experimental-transform-types`(since v22.7.0) or `--experimental-strip-types`(since v22.6.0) flag on `NODE_OPTIONS` environment variable.
-- v22.18.0 or higher: Work without flags.
+Node 26 no longer bundles Corepack, so install the pnpm version pinned in the `packageManager` field of `package.json`:
+
+```sh
+npm install -g pnpm@10.17.1
+```
+
+Then install the dependencies:
+
+```sh
+pnpm install
+```
+
+`postinstall` registers the git hooks (via `simple-git-hooks`), so run `pnpm install` before your first commit. The pre-commit hook runs the non-mutating `check` script (formatting, lint, and tests); when it fails, apply fixes with `pnpm format` and `pnpm lint`.
 
 ## Conventions and Rules
 
@@ -26,78 +35,27 @@ This project follows specific conventions and rules for code style, data validat
 
 ---
 
-## Preact-First Module Contract
+## Static Hosting
 
-This template ships with **Preact** as the default runtime, but all application source code imports from React-compatible module specifiers (`"react"`, `"react-dom"`, `"react-dom/client"`, `"react-router-dom"`). The framework selection is controlled by a single top-level toggle in `vite.config.ts`:
+Deploy the `dist/` output over HTTP(S). The included deploy workflow
+(`.github/workflows/deploy.yml`) builds with the GitHub Pages base path and
+publishes the result as a GitHub Pages site. A plain `pnpm build` emits
+root-absolute asset URLs (`base: "/"`), so that output serves correctly from a
+domain root — a GitHub Pages user site or a custom domain — or via
+`pnpm preview`. For a GitHub Pages project site under a subpath
+(`https://<user>.github.io/<repo>/`), rebuild with a matching base, e.g.
+`pnpm build --base "/<repo>/"`, before deploying `dist/`.
 
-```ts
-// vite.config.ts
-const usePreact = true; // ← change to false for real React
-```
+This template uses clean `BrowserRouter` URLs. GitHub Pages serves the
+SPA-bearing `404.html` for a refresh or direct visit to a client route, so React
+can render the matching page without changing the URL.
 
-### Vite Alias Mapping (Preact mode)
+GitHub Pages fallback responses retain an HTTP 404 status even when React
+renders a valid client route. This can affect SEO, crawlers, and link previews.
+Unknown client routes render the application's `Page not found` view.
 
-When `usePreact = true`, `@preact/preset-vite` (with `reactAliasesEnabled: true`) rewrites these module specifiers at build time:
+`file://` viewing is unsupported.
 
-| Import              | Resolves to                 |
-| ------------------- | --------------------------- |
-| `react`             | `preact/compat`             |
-| `react-dom`         | `preact/compat`             |
-| `react-dom/client`  | `preact/compat`             |
-| `react/jsx-runtime` | `preact/compat/jsx-runtime` |
+## Tests
 
-### Why not native browser import maps?
-
-This template bundles its output for local `file://` viewing and static hosting (GitHub Pages). Native browser import maps would require externalized/CDN modules and conflict with the bundled, self-contained output that the `spaCopyPlugin` produces. The Vite alias approach keeps the full SPA file set local and protocol-agnostic.
-
----
-
-## Switching to React
-
-Changing the runtime from Preact to React requires **zero source code changes**. Do the following:
-
-1. **Set `usePreact` to `false`** in `vite.config.ts`:
-
-    ```diff
-    - const usePreact = true;
-    + const usePreact = false;
-    ```
-
-    This activates `@vitejs/plugin-react` instead of `@preact/preset-vite`.
-
-2. **(Optional) Remove Preact dependencies** from `package.json` if you no longer need them:
-
-    ```bash
-    pnpm remove preact @preact/preset-vite
-    ```
-
-3. **(Optional) Swap the browser test renderer** (for a purely Preact setup without the compat alias):
-    ```bash
-    pnpm remove vitest-browser-react
-    pnpm add -D vitest-browser-preact
-    ```
-    (The template ships with `vitest-browser-react` so the same test source works in both modes via the alias. Keep `vitest-browser-react` for React mode — it is the correct renderer. Only switch to `vitest-browser-preact` if you want a purely Preact test suite.)
-
-Application code, router imports, TypeScript types, and JSX will continue to work as-is because they are written against the shared React API subset.
-
----
-
-## Compatibility Boundary
-
-`preact/compat` is a compatibility layer, **not** a mathematically complete subset of every React version. Preact's official documentation states:
-
-> "preact/compat aims for broad compatibility with React, but does not implement every React feature."
-
-In practice:
-
-- **Supported**: `useState`, `useEffect`, `useRef`, `useCallback`, `useMemo`, `useContext`, `createContext`, `createRoot`, `ReactNode`, `FC`, JSX runtime, React Router (current 7.x), and the vast majority of React DOM APIs.
-- **Not guaranteed**: Very new React APIs (late additions to React 18/19), React-specific internals, or libraries with deep React version checks. Preact tracks the current and previous React majors and adds partial support for newer features.
-- **Lint rules**: oxlint's built-in `react` plugin (native Rust, not ESLint) validates JSX and hooks. The config explicitly disables `react/react-in-jsx-scope` because the template uses the automatic JSX runtime.
-
-Keep application code to the shared React API subset. If you need a React-only feature that Preact compat doesn't support, set `usePreact = false` and use the real React packages already installed.
-
-### Useful Links
-
-- [oxlint plugins documentation](https://oxc.rs/docs/guide/usage/linter/plugins) — native React plugin rules
-- [Preact Getting Started](https://preactjs.com/guide/v10/getting-started/)
-- [Preact Differences from React](https://preactjs.com/guide/v10/differences-to-react/)
+Vitest has separate Node (`tests/unit/`) and jsdom (`tests/browser/`) projects. Browser fixtures use React Testing Library and exercise rendered user behavior, including route navigation.

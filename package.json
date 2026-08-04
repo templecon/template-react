@@ -11,8 +11,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "format": "prettier --write . --cache --list-different",
-        "format:check": "prettier --check . --cache",
+        "format": "oxfmt --write .",
+        "format:check": "oxfmt --check .",
         "lint": "pnpm run lint:check --fix",
         "lint:check": "oxlint .",
         "postinstall": "pnpm exec simple-git-hooks",
@@ -29,7 +29,7 @@
         "react-router-dom": "^7.18.1"
     },
     "devDependencies": {
-        "@concertypin/config": "^0.2.0",
+        "@concertypin/config": ">=0.3.0 <1.0.0",
         "@tailwindcss/postcss": "^4.3.2",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/jest-dom": "^6.9.1",
@@ -41,10 +41,10 @@
         "@vitest/coverage-v8": "^4.1.10",
         "globals": "^17.7.0",
         "jsdom": "^30.0.1",
+        "oxfmt": "^0.62.0",
         "oxlint": "^1.73.0",
         "oxlint-tsgolint": "^0.24.0",
         "postcss": "^8.5.16",
-        "prettier": "^3.9.5",
         "simple-git-hooks": "^2.13.1",
         "tailwindcss": "^4.3.2",
         "typescript": "~7.0.2",

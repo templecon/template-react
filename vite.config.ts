@@ -50,7 +50,7 @@ const testConfig: Config["test"] = {
 };
 
 export default defineConfig({
-    base: "/",
+    base: "./",
     build: {
         outDir: "dist",
         rolldownOptions: {

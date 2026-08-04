@@ -40,11 +40,12 @@ This project follows specific conventions and rules for code style, data validat
 Deploy the `dist/` output over HTTP(S). The included deploy workflow
 (`.github/workflows/deploy.yml`) builds with the GitHub Pages base path and
 publishes the result as a GitHub Pages site. A plain `pnpm build` emits
-root-absolute asset URLs (`base: "/"`), so that output serves correctly from a
-domain root — a GitHub Pages user site or a custom domain — or via
-`pnpm preview`. For a GitHub Pages project site under a subpath
-(`https://<user>.github.io/<repo>/`), rebuild with a matching base, e.g.
-`pnpm build --base "/<repo>/"`, before deploying `dist/`.
+relative asset URLs, so that output serves correctly from a domain root, a
+GitHub Pages project site subpath (`https://<user>.github.io/<repo>/`), or via
+`pnpm preview`. For History API routing below the domain root, rebuild with the
+site's absolute base path, e.g. `pnpm build --base "/<repo>/"`, before
+deploying `dist/`, so the router links and the `404.html` fallback shell
+resolve against the real mount path.
 
 This template uses clean `BrowserRouter` URLs. GitHub Pages serves the
 SPA-bearing `404.html` for a refresh or direct visit to a client route, so React

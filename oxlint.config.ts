@@ -1,7 +1,6 @@
 import { defineConfig } from "oxlint";
 import frontendConfig from "@concertypin/config/oxlint/frontend";
 import reactConfig from "./scripts/linter/oxlint-react.ts";
-import scriptsConfig from "@concertypin/config/oxlint/scripts";
 
 export default defineConfig({
     $schema: "./node_modules/oxlint/configuration_schema.json",
@@ -24,5 +23,5 @@ export default defineConfig({
         typeAware: true,
         typeCheck: true,
     },
-    extends: [frontendConfig, reactConfig, scriptsConfig],
+    extends: [frontendConfig, reactConfig],
 });

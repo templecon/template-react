@@ -17,7 +17,7 @@
         "lint:check": "oxlint .",
         "postinstall": "pnpm exec simple-git-hooks",
         "preview": "vite preview",
-        "check": "pnpm run format:check && pnpm run lint:check && pnpm run test",
+        "check": "pnpm run format && pnpm run lint && pnpm run test",
         "test": "vitest run"
     },
     "engines": {
@@ -29,7 +29,7 @@
         "react-router-dom": "^7.18.1"
     },
     "devDependencies": {
-        "@concertypin/config": "^0.1.2",
+        "@concertypin/config": "^0.2.0",
         "@tailwindcss/postcss": "^4.3.2",
         "@testing-library/dom": "^10.4.1",
         "@testing-library/jest-dom": "^6.9.1",

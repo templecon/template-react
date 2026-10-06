@@ -2,8 +2,9 @@
 
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type UserConfig, defineConfig } from "vite";
+
 import reactPlugin from "@vitejs/plugin-react";
+import { type UserConfig, defineConfig } from "vite";
 
 type Config = Required<UserConfig>;
 const resolveAlias: Config["resolve"] = {

@@ -1,11 +1,12 @@
-import frontendConfig from "@concertypin/config/oxlint/frontend";
+import createFrontendOxlintConfig from "@concertypin/config/oxlint/frontend";
 import { defineConfig } from "oxlint";
 
 import reactConfig from "./scripts/linter/oxlint-react.ts";
 
+const frontend = createFrontendOxlintConfig("src/index.css");
+
 export default defineConfig({
-    ...frontendConfig("src/index.css"),
-    $schema: "./node_modules/oxlint/configuration_schema.json",
+    jsPlugins: ["oxlint-tailwindcss"],
     plugins: ["typescript", "unicorn", "import", "vitest", "promise", "react"],
     env: {
         builtin: true,
@@ -25,5 +26,6 @@ export default defineConfig({
         typeAware: true,
         typeCheck: true,
     },
-    extends: [reactConfig],
+    settings: { tailwindcss: { entryPoint: "src/index.css" } },
+    extends: [frontend, reactConfig],
 });

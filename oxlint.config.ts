@@ -3,8 +3,6 @@ import { defineConfig } from "oxlint";
 
 import reactConfig from "./scripts/linter/oxlint-react.ts";
 
-const frontend = createFrontendOxlintConfig("src/index.css");
-
 export default defineConfig({
     jsPlugins: ["oxlint-tailwindcss"],
     plugins: ["typescript", "unicorn", "import", "vitest", "promise", "react"],
@@ -27,5 +25,5 @@ export default defineConfig({
         typeCheck: true,
     },
     settings: { tailwindcss: { entryPoint: "src/index.css" } },
-    extends: [frontend, reactConfig],
+    extends: [createFrontendOxlintConfig("src/index.css"), reactConfig],
 });

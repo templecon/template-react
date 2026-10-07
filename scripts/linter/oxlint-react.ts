@@ -5,7 +5,6 @@
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-    $schema: "../../node_modules/oxlint/configuration_schema.json",
     rules: {
         "react/jsx-key": "error",
         "react/jsx-no-comment-textnodes": "error",

@@ -1,7 +1,7 @@
 function About() {
     return (
-        <main className="text-center p-6">
-            <h1 className="text-3xl font-bold mb-4">About This Template</h1>
+        <main className="p-6 text-center">
+            <h1 className="mb-4 text-3xl font-bold">About This Template</h1>
             <p className="mb-2">
                 This is a <strong>React SPA template</strong> built with Vite.
             </p>

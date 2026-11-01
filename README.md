@@ -11,13 +11,7 @@ git clone <repository-url> template-react
 
 Node.js 26 or higher is required. The templates run TypeScript configuration and hooks directly with Node's built-in type stripping.
 
-Node 26 no longer bundles Corepack, so install the pnpm version pinned in the `packageManager` field of `package.json`:
-
-```sh
-npm install -g pnpm@10.17.1
-```
-
-Then install the dependencies:
+This project uses pnpm. Install dependencies:
 
 ```sh
 pnpm install
